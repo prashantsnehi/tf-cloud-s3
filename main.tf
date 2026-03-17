@@ -36,7 +36,7 @@ resource "aws_vpc" "main" {
   }
 }
 
-resource "aws_subnet" "private" {
+resource "aws_subnet" "subnets" {
   count = 2
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.${count.index}.0/24"
