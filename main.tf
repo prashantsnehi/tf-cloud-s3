@@ -18,4 +18,8 @@ resource "random_id" "rand_id" {
 resource "aws_s3_bucket" "demo-bucket" {
   bucket = "tf-cloud-${random_id.rand_id.hex}"
 }
+
+output "bucket_name" {
+  value = aws_s3_bucket.demo-bucket.bucket
+}
   
