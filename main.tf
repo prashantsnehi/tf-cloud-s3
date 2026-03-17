@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 resource "random_id" "rand_id" {
-    byte_length = 10
+  byte_length = 12
 }
 
 resource "aws_s3_bucket" "demo-bucket" {
@@ -37,20 +37,40 @@ resource "aws_vpc" "main" {
 }
 
 resource "aws_subnet" "subnets" {
-  count = 2
+  count      = 2
   vpc_id     = aws_vpc.main.id
   cidr_block = "10.0.${count.index}.0/24"
-    tags = {
-        Name = "psnehi-subnet-${count.index}"
-    }
+  tags = {
+    Name = "psnehi-subnet-${count.index}"
+  }
+}
+
+resource "aws_internet_gateway" "my-igw" {
+  vpc_id = aws_vpc.main.id
+}
+
+resource "aws_route_table" "my-route-table" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.my-igw.id
+  }
+}
+
+resource "aws_route_table_association" "my-route-table-association" {
+  count          = length(aws_subnet.subnets)
+  subnet_id      = aws_subnet.subnets[count.index].id
+  route_table_id = aws_route_table.my-route-table.id
 }
 
 resource "aws_instance" "myserver" {
   ami           = "ami-07c8c1b18ca66bb07"
   instance_type = "t3.micro"
   #vpc_security_group_ids = [aws_security_group.main.id]
-  subnet_id                   = aws_subnet.private[0].id
-  associate_public_ip_address = false
+  subnet_id                   = aws_subnet.subnets[0].id
+  associate_public_ip_address = true
+  security_groups             = [aws_security_group.main.id]
   depends_on                  = [aws_security_group.main]
 
   lifecycle {
