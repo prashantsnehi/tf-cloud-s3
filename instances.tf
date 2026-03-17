@@ -1,11 +1,12 @@
-locals {
-    instances_details = {
-        name              = "psnehi-instance"
-        ami               = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI (HVM), SSD Volume Type
-        instance_type     = "t2.micro"
-        availability_zone = "ap-south-1a"
-    }
-}
+# locals {
+#     instances_details = {
+#         name              = "psnehi-instance"
+#         ami               = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI (HVM), SSD Volume Type
+#         instance_type     = "t2.micro"
+#         availability_zone = "ap-south-1a"
+#     }
+# }
+
 resource "aws_instance" "myserver" {
   for_each = aws_subnet.subnets
   ami           = locals.instances_details.ami
