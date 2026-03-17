@@ -9,11 +9,11 @@
 
 resource "aws_instance" "myserver" {
   for_each = aws_subnet.subnets
-  ami           = locals.instances_details.ami
-  instance_type = locals.instances_details.instance_type
-  availability_zone = locals.instances_details.availability_zone
+  ami           = aws_instances_details.ami
+  instance_type = aws_instances_details.instance_type
+  availability_zone = aws_instances_details.availability_zone
   tags = {
-    Name = locals.instances_details.name
+    Name = aws_instances_details.name
   }
   #vpc_security_group_ids = [aws_security_group.main.id]
   subnet_id                   = each.value.id
