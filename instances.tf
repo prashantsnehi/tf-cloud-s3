@@ -4,11 +4,11 @@ resource "aws_instance" "myserver" {
   # }
   count = length(aws_subnet.subnets)
 
-  ami               = aws_instances_details["ubuntu"].ami
-  instance_type     = aws_instances_details["ubuntu"].instance_type
-  availability_zone = aws_instances_details["ubuntu"].availability_zone
+  ami               = var.aws_instances_details["ubuntu"].ami
+  instance_type     = var.aws_instances_details["ubuntu"].instance_type
+  availability_zone = var.aws_instances_details["ubuntu"].availability_zone
   tags = {
-    Name = "${aws_instances_details["ubuntu"].name}-${count.index + 1}"
+    Name = "${var.aws_instances_details["ubuntu"].name}-${count.index + 1}"
   }
   #vpc_security_group_ids = [aws_security_group.main.id]
   # subnet_id                   = each.value.id
