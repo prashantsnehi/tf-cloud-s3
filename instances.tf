@@ -1,21 +1,22 @@
 locals {
-    instances_details = {
-        name              = "psnehi-instance"
-        ami               = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI (HVM), SSD Volume Type
-        instance_type     = "t2.micro"
-        availability_zone = "ap-south-1a"
-    }
+  instances_details = {
+    name              = "psnehi-instance"
+    ami               = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI (HVM), SSD Volume Type
+    instance_type     = "t2.micro"
+    availability_zone = "ap-south-1a"
+  }
 }
 
 resource "aws_instance" "myserver" {
   for_each = {
-    for subnet in aws_subnet.subnets : subnet.id => subnet
+    for idx, subnet in aws_subnet.subnets : subnet.id => subnet
   }
-  ami           = local.instances_details.ami
-  instance_type = local.instances_details.instance_type
+
+  ami               = local.instances_details.ami
+  instance_type     = local.instances_details.instance_type
   availability_zone = local.instances_details.availability_zone
   tags = {
-    Name = local.instances_details.name
+    Name = "${local.instances_details.name}-${each.index}"
   }
   #vpc_security_group_ids = [aws_security_group.main.id]
   subnet_id                   = each.value.id
