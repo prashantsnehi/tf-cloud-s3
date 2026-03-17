@@ -8,7 +8,7 @@ locals {
 }
 
 resource "aws_instance" "myserver" {
-  for_each = aws_subnet.subnets
+  for_each = {for subnet in aws_subnet.subnets : subnet.id => subnet}
   ami           = local.instances_details.ami
   instance_type = local.instances_details.instance_type
   availability_zone = local.instances_details.availability_zone
