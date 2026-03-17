@@ -1,25 +1,18 @@
-locals {
-  instances_details = {
-    name              = "psnehi-instance"
-    ami               = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 AMI (HVM), SSD Volume Type
-    instance_type     = "t2.micro"
-    availability_zone = "ap-south-1a"
-  }
-}
-
 resource "aws_instance" "myserver" {
-  for_each = {
-    for idx, subnet in aws_subnet.subnets : subnet.id => subnet
-  }
+  # for_each = {
+  #   for idx, subnet in aws_subnet.subnets : subnet.id => subnet
+  # }
+  count = length(aws_subnet.subnets)
 
-  ami               = local.instances_details.ami
-  instance_type     = local.instances_details.instance_type
-  availability_zone = local.instances_details.availability_zone
+  ami               = aws_instances_details["ubuntu"].ami
+  instance_type     = aws_instances_details["ubuntu"].instance_type
+  availability_zone = aws_instances_details["ubuntu"].availability_zone
   tags = {
-    Name = "${local.instances_details.name}"
+    Name = "${aws_instances_details["ubuntu"].name}-${count.index + 1}"
   }
   #vpc_security_group_ids = [aws_security_group.main.id]
-  subnet_id                   = each.value.id
+  # subnet_id                   = each.value.id
+  subnet_id = aws_subnet.subnets[count.index].id
   associate_public_ip_address = true
   security_groups             = [aws_security_group.main.id]
   depends_on                  = [aws_security_group.main]
