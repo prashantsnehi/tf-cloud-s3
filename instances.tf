@@ -16,7 +16,7 @@ resource "aws_instance" "myserver" {
   instance_type     = local.instances_details.instance_type
   availability_zone = local.instances_details.availability_zone
   tags = {
-    Name = "${local.instances_details.name}-${each.index}"
+    Name = "${local.instances_details.name}"
   }
   #vpc_security_group_ids = [aws_security_group.main.id]
   subnet_id                   = each.value.id
