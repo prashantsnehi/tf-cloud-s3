@@ -19,7 +19,7 @@ resource "aws_instance" "myserver" {
 
   lifecycle {
     #create_before_destroy = true
-    prevent_destroy = true
+    # prevent_destroy = true
     #replace_triggered_by = [aws_security_group.main, aws_security_group.main.ingress]
 
     # precondition {
