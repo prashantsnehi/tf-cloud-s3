@@ -20,6 +20,7 @@ variable "aws_instances_details" {
     name              = string
     instance_type     = string
     ami               = string
+    region            = string 
     availability_zone = string
   }))
 }
