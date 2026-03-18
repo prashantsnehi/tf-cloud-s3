@@ -6,14 +6,14 @@ resource "aws_instance" "myserver" {
 
   ami               = var.aws_instances_details["ubuntu"].ami
   instance_type     = var.aws_instances_details["ubuntu"].instance_type
-  region = var.AWS_REGION
-  availability_zone = var.aws_instances_details["ubuntu"].availability_zone
+  region            = var.AWS_REGION
+  availability_zone = "${var.AWS_REGION}a"
   tags = {
     Name = "${var.aws_instances_details["ubuntu"].name}-${count.index + 1}"
   }
   #vpc_security_group_ids = [aws_security_group.main.id]
   # subnet_id                   = each.value.id
-  subnet_id = aws_subnet.subnets[count.index].id
+  subnet_id                   = aws_subnet.subnets[count.index].id
   associate_public_ip_address = true
   security_groups             = [aws_security_group.main.id]
   depends_on                  = [aws_security_group.main]
