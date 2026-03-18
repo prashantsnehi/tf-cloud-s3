@@ -6,6 +6,7 @@ resource "aws_instance" "myserver" {
 
   ami               = var.aws_instances_details["ubuntu"].ami
   instance_type     = var.aws_instances_details["ubuntu"].instance_type
+  region = var.AWS_REGION
   availability_zone = var.aws_instances_details["ubuntu"].availability_zone
   tags = {
     Name = "${var.aws_instances_details["ubuntu"].name}-${count.index + 1}"
