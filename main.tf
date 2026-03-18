@@ -12,7 +12,7 @@ provider "aws" {
 }
 
 resource "random_id" "rand_id" {
-  byte_length = 12
+  byte_length = 10
 }
 
 
